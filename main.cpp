@@ -1,7 +1,7 @@
 #include <iostream>
 
 int main(int argc, char** argv){
-    printf("Lets GOOO\n");
+    printf("Lets GOOO...\n");
     
     return 0;
 }
