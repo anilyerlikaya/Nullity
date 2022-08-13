@@ -1,7 +1,33 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.10) 
 
 # project name
 project(Nullity)
 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# opencv
+set(OpenCV_DIR "${CMAKE_SOURCE_DIR}/3rdparties/opencv/lib/cmake/opencv4")
+find_package(OpenCV REQUIRED)
+
+message(STATUS "OpenCV_Include: ${OpenCV_INCLUDE_DIRS}")
+message(STATUS "OpenCV_Libs: ${OpenCV_LIBS}")
+
+
+# include directories
+include_directories(
+    ${OpenCV_INCLUDE_DIRS}
+    ${CMAKE_SOURCE_DIR}/src/
+    ${CMAKE_SOURCE_DIR}/src/data/
+    ${CMAKE_SOURCE_DIR}/src/vision/
+)
+
+# add other projects
+add_subdirectory(src/data)
+add_subdirectory(src/vision)
+
 # executable
 add_executable(Nullity main.cpp)
+
+target_include_directories(Nullity PUBLIC ${OpenCV_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/data ${CMAKE_SOURCE_DIR}/src/vision)
+target_link_libraries(Nullity lib_data lib_vision ${OpenCV_LIBS})
