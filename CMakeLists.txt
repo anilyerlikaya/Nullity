@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # opencv
-set(OpenCV_DIR "${CMAKE_SOURCE_DIR}/3rdparties/opencv/lib/cmake/opencv4")
+set(OpenCV_DIR "${CMAKE_SOURCE_DIR}/3rdParties/opencv/lib/cmake/opencv4")
 find_package(OpenCV REQUIRED)
 
 message(STATUS "OpenCV_Include: ${OpenCV_INCLUDE_DIRS}")
