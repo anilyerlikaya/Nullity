@@ -1,6 +1,10 @@
 #pragma once
 
+#include <iostream>
 #include <stdlib.h>
+
+#include <string>
+#include <unistd.h>
 
 /* Allocate size * T memory and initialize it as default_value */
 template <typename T>
@@ -20,3 +24,6 @@ void reloc(T* ptr, int size){
 
     return;
 }
+
+/* check if file exist */
+bool fileExist(std::string path);

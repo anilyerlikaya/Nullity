@@ -4,7 +4,12 @@
 #include "utils.h"
 #include <iostream>
 
-//namespace nul {
+#include <opencv2/opencv.hpp>
+#include <opencv2/core.hpp>
+
+#ifdef _DEBUG
+#define _DATA
+#endif
 
 /*
     - A basic container for keeping 1D data which is basically an array
@@ -34,13 +39,17 @@ public:
 
         this->_size = _size;
         
+#ifdef _DATA
         std::cout<<"DEBUG: _Array memory constructed!\n";
+#endif
     }; 
 
     ~Array() {
         free(_data);
 
+#ifdef _DATA
         printf("DEBUG: _Array memory flushed!\n");
+#endif
     };
 
 
@@ -48,4 +57,27 @@ public:
     int size() { return _size; };
 };
 
-// }
+
+template<class T>
+class Matrix2d {
+private:
+    Array<T>* _matrix;
+    int _width, _height;
+
+public:
+    Matrix2d() {}
+
+    /* Read from opencv mat */
+    Matrix2d(cv::Mat mat) {
+        std::cout << "size: " << mat.size << std::endl;
+
+        return;
+    }
+
+    ~Matrix2d() {
+        free(_matrix);
+
+        return;
+    }
+
+};

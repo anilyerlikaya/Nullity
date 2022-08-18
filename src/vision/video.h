@@ -1,10 +1,12 @@
-#include <iostream>
+#pragma once
 
-#include "exceptions.h"
+#include <iostream>
 
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/core.hpp>
+
+#include <exceptions.h>
 
 // need a parent class => Reader
 class VideoReader{
