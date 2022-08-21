@@ -20,8 +20,9 @@ int test_video(int argc, char** argv) {
         }
 
         cv::destroyAllWindows();
-    } catch (std::exception e) {
-        printf("%s\n", e.what());   
+    } catch (const std::exception & e) {
+        printf("%s\n", e.what()); 
+        return -100;  
     }
 
     return 0;

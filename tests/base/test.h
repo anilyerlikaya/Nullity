@@ -6,3 +6,4 @@
 
 int test_video(int argc, char** argv);
 int test_matrix(int argc, char** argv);
+int test_point(int argc, char** argv);

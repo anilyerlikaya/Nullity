@@ -20,3 +20,13 @@ bool fileExist(std::string path) {
 
     return true;
 }
+
+
+/*
+ * Plot opencv frame
+ */
+void showFrame(cv::Mat frame, std::string name) {
+    cv::imshow(name, frame);
+    cv::waitKey(0);
+    cv::destroyWindow(name);
+}

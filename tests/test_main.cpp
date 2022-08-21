@@ -16,16 +16,19 @@ int main(int argc, char** argv){
             int test_result = -1;
             switch(test_id) { 
                 case 3:
-                    test_result = test_matrix(argc, argv);
+                    test_result = test_point(argc, argv);
                     break;
                 case 2:
-                    test_result = test_video(argc, argv);
+                    test_result = test_matrix(argc, argv);
                     break;
                 case 1:
+                    test_result = test_video(argc, argv);
+                    break;
+                case 0:
                 default:
                     break;
             }
-        } catch (std::exception e) {
+        } catch (const std::exception & e) {
             printf("Exception: %s\n", e.what());
         }
     }
