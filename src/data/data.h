@@ -1,8 +1,7 @@
 #pragma once
 
 // headers
-#include "utils.h"
-#include <iostream>
+#include "helper.h"
 
 #include <opencv2/opencv.hpp>
 #include <opencv2/core.hpp>
@@ -10,6 +9,8 @@
 #ifdef _DEBUG
 #define _DATA
 #endif
+
+namespace nl {
 
 /*
  * A basic container for keeping 1D data which is basically an array
@@ -470,14 +471,46 @@ public:
     Point2d operator=(const Point2d & other) {
         this->x = other.x;
         this->y = other.y;
-    }
-
-
-    /*
-     * Getters
-     */
-
-    
+    }    
     
     ~Point2d() {}
 };
+
+
+/*
+ * Rectange2d: (x1,y1,x2,y2)
+ * Types can be short, int, float, ...
+ */
+template<class T>
+class Rectangle2d {
+private:
+    // --------------------------------
+
+protected:
+    // --------------------------------
+
+public:
+    // top-left and bottom-right points of rectangle 
+    Point2d<T> tl, br;
+
+    // default constructor
+    Rectangle2d() {}
+
+    // Constructor v1
+    // top-left = (x1, y1)
+    // bottom-right = (x2, y2) 
+    Rectangle2d(T x1, T y1, T x2, T y2) {
+        tl = Point2d<T>(x1, y1);
+        br = Point2d<T>(x2, y2);
+    }
+
+    // Constructor v1
+    Rectangle2d(nl::Point2d<T> _tl, nl::Point2d<T> _br) {
+        this->tl = _tl;
+        this->br = _br;
+    }
+
+    ~Rectangle2d() {};
+};
+
+}                                                                                               // end of namespace "nl"
