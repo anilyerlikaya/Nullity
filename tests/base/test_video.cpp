@@ -3,6 +3,9 @@
 int test_video(int argc, char** argv) {
     printf("\n*******************\nTest: VideoStream\n*******************\n\n");
 
+    if(argc < 3)
+        throw std::runtime_error("need second argument for video path!\n");
+
     std::string video_path(argv[2]);
     printf("video_path: %s\n", video_path.c_str());
 

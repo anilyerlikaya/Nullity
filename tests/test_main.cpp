@@ -8,13 +8,21 @@ int main(int argc, char** argv){
             int test_id = std::stoi(argv[1]);
             printf("text selection: %d\n", test_id);
             /*
-            * 2: video stream test (probably need improvements)
-            * 3: matrix test
+            * 1: video stream test (probably need improvements)
+            * 2: matrix test
+            * 3: point test - maybe kalman filter too?
+            * 4: logger test
             * inf => test params
             */
 
             int test_result = -1;
             switch(test_id) { 
+                case 5:
+                    throw std::invalid_argument("test_id: 4 not initialized yet!\n");
+                    break;
+                case 4:
+                    test_result = test_logger(argc, argv);
+                    break;
                 case 3:
                     test_result = test_point(argc, argv);
                     break;

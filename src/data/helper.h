@@ -3,12 +3,6 @@
 #include <iostream>
 #include <stdlib.h>
 
-#include <string>
-#include <unistd.h>
-
-#include <opencv2/opencv.hpp>
-#include <opencv2/core.hpp>
-
 /* Allocate size * T memory and initialize it as default_value */
 template <typename T>
 T* defloc( int size, T default_value) {
@@ -28,9 +22,3 @@ void reloc(T* ptr, int size){
     return;
 }
 
-/* check if file exist */
-bool fileExist(std::string path);
-
-
-/* with opencv */
-void showFrame(cv::Mat frame, std::string name="frame");
