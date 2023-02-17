@@ -13,6 +13,10 @@
 namespace nl {
 
 /*
+ * Notes: all templates types must be numerical such as int, float or double
+ */
+
+/*
  * A basic container for keeping 1D data which is basically an array
  * Currently, it takes only numarical values
 */
@@ -30,14 +34,8 @@ protected:
 
 public:
     /*  Default constructor  */
-    Array() {}
-    
-    /* Constructor v1 */
-    Array(int size, T _default_value=0) {
-        this->_size = size;
-        _data = defloc(_size, _default_value);
-
-        initialized = true;
+    Array(int size=1, T _default_value=0) {
+        init(size, _default_value);
     }
 
     /* copy constructor */
@@ -48,7 +46,7 @@ public:
         // delete old memory
         clear();
 
-        this->size = arr._size;
+        this->_size = arr._size;
         this->_data = temp;    
 
         initialized = true;    
@@ -71,6 +69,10 @@ public:
 
         return *this;
     }
+
+    /*
+     * Initializations
+     */
 
     // initialize with a default memory
     void init(int size, T _value=0) {
@@ -98,23 +100,43 @@ public:
     }
 
     /*
-     * Setters
-     */
-
-
-    /*
-     * Getters
+     * Getters & Setters
      */
     
     // get data at specific position
-    T get_point(int index) { return _data[index]; }
+    T get_point(int index) { 
+        if(index >= _size)
+            throw std::invalid_argument("Cannot access not initialized data in an Array!");
+        return _data[index]; 
+    }
+
+    // set data at specific poisiton
+    void set_point(int index, T value) {
+        if(index >= _size)
+            throw std::invalid_argument("Cannot access not initialized data in an Array!");
+        _data[index] = value;
+    }
 
     // get all memory
     T* get_array() { return _data; }
 
-    // helper functions
+
+    /*
+     * Operations
+     */
+    Array& operator/(T val){                                                                                        // division to single value
+        std::transform(_data, _data+_size, _data, [val](T x) {return x / val;});
+        return *this;
+    } 
+
+    /*
+     * Utility Functions
+     */ 
     int size() { return _size; };
 
+    /*
+     * Others
+     */
     void clear() {
         if(initialized)
             delete[] _data;
@@ -122,7 +144,6 @@ public:
     }
     ~Array() { clear(); }
 };
-
 
 /*
  * Single Channel Imgs
@@ -137,10 +158,22 @@ private:
 
 public:
     /* Default Constructor */
-    Matrix2d() {}
+    Matrix2d(int width = 1, int height = 1, T default_value = 0) {
+        _width = width;
+        _height = height;
+
+        // memory allocation and set
+        _matrix = new Array<T>[_height];
+        for(int i=0; i < _height; i++) 
+            _matrix[i].init(_width, default_value);
+
+        initialized = true;
+    }
 
     /* Read from opencv mat */
     Matrix2d(cv::Mat mat) {
+        clear();
+
         // check if img has single channel
         if(mat.channels() > 1)
             throw std::invalid_argument("matrix2d can only initialize with opencv gray-scale imgs!\n");
@@ -170,8 +203,7 @@ public:
      * Constructor v2
     */
     Matrix2d(int width, int height, Array<T>* array) {
-        if(this->_width != -1 || this->_height != -1)
-            delete [] this->_matrix;
+        clear();
 
         this->_width = width;
         this->_height = height;
@@ -225,11 +257,9 @@ public:
 
 
     /*
-     * Getters
-     */
-    int get_width() { return this->_width; }  
-    int get_height() { return this->_height; }  
-    T* get_row(int index) { 
+     * Getters & Setters
+     */    
+    T* get_row(int index) {                                                                                     // Get row array as type pointer!
         if(index < _height)
             return this->_matrix[index].get_array(); 
         return nullptr;        
@@ -245,6 +275,13 @@ public:
         return -1;
     }
 
+    // set value in given position
+    void set_point(int y, int x, T value) {
+        if(!(x < _width && y < _height))
+            throw std::invalid_argument("Invalid range to access memory in Matrix2d!\n");
+        _matrix[y].set_point(x, value);
+    } 
+
     /* get whole matrix */
     Array<T>* get_matrix() { return this->_matrix; } 
 
@@ -259,6 +296,24 @@ public:
         return img;
     }
 
+    /*
+     * Operations
+     */
+    Matrix2d& operator/(T val){                                                                                 // division to single value
+        for(int i=0; i<_height; i++) 
+            _matrix[i] = _matrix[i] / val;
+        return *this;
+    } 
+
+    /*
+     * Utility Functions
+     */
+    int width() { return this->_width; }  
+    int height() { return this->_height; }  
+
+    /*
+     * Others
+     */
     void clear() {
         if(initialized)
             delete[] _matrix;
@@ -269,7 +324,6 @@ public:
     }
     ~Matrix2d() { clear(); }
 };
-
 
 /*
  * Img with multi channels
@@ -441,7 +495,6 @@ public:
     ~Matrix3d() { clear(); }
 };
 
-
 /*
  * Point2d: (x,y)
  * Types can be short, int, float, ...
@@ -475,7 +528,6 @@ public:
     
     ~Point2d() {}
 };
-
 
 /*
  * Rectange2d: (x1,y1,x2,y2)
