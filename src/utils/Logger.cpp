@@ -11,6 +11,10 @@ nl::Logger::Logger(std::string file_name, std::string path): _path(path), _file_
     stream << "CREATED AT " + s + "\n------------------------------------------\n\n";
     stream.flush();
 }
+
+nl::Logger::~Logger() {
+    stream.close();
+}
  
 nl::Logger* nl::Logger::getInstance(const std::string fileName, const std::string path) {
     if(logger == nullptr) 

@@ -68,7 +68,9 @@ std::ofstream createStream(std::string folder_path, std::string file_name) {
     if(!dirExist(folder_path))
         createDir(folder_path);
         
-    std::ofstream outfile(folder_path + "/" + file_name, std::ofstream::out | std::ofstream::app);    
+    std::ofstream outfile(folder_path + "/" + file_name, std::ofstream::out | std::ofstream::app); 
+    if(!outfile.is_open())  
+        throw std::runtime_error("Cannot create folder for outstream!\n");
     return outfile;
 }
 
@@ -79,5 +81,3 @@ void createDir(std::string path) {
     if(!dirExist(path)) 
         mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 }
-
-
