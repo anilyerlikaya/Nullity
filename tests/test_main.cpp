@@ -38,7 +38,7 @@ int main(int argc, char** argv){
                     test_result = test_matrix(argc, argv);
                     break;
                 case 1:
-                    test_result = test_video(argc, argv);
+                    test_result = test_features(argc, argv);
                     break;
                 case 0:
                 default:

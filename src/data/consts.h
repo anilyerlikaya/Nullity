@@ -1,0 +1,2 @@
+
+#define MAX_FLOAT 3.40282e+038

@@ -8,9 +8,14 @@
 
 #include "data/data.h"
 #include "utils/maths.h"
-#include <cstdlib> // for rand()
+#include "algo/ml/unsupervised/kmeans.h"
+
+#include <random>
+//#include <cstdlib> // for rand()
 
 namespace nl::distributions {
+
+nl::Array<int> generate_labels(int class_size, nl::Matrix2d<float>& dataset);                                         // static function for generating labels
 
 class Bernoulli {
 private:
@@ -45,10 +50,22 @@ public:
 class Poison {
 private:
     int lambda;
+    std::mt19937 mt;
     float random_variable();
 protected:
 public:
     Poison(int mean);
+    std::pair<nl::Matrix2d<float>, nl::Array<int>> generate_data(int data_size, int feature_size, int class_count);
+};
+
+class Gaussian {                                                                                                            // Normal distribution
+private:
+    int mean, var;
+    std::mt19937 mt;
+    float random_variable();
+protected:
+public:
+    Gaussian(int mean=0, int variance=1);
     std::pair<nl::Matrix2d<float>, nl::Array<int>> generate_data(int data_size, int feature_size, int class_count);
 };
 

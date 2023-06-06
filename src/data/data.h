@@ -2,6 +2,7 @@
 
 // headers
 #include "helper.h"
+#include "exceptions.h"
 
 #include <opencv2/opencv.hpp>
 #include <opencv2/core.hpp>
@@ -33,13 +34,11 @@ protected:
     ****************************/
 
 public:
-    /*  Default constructor  */
-    Array(int size=1, T _default_value=0) {
+    Array(int size=1, T _default_value=0) {                                                                     /*  Default constructor  */
         init(size, _default_value);
     }
 
-    /* copy constructor */
-    Array(const Array & arr) {        
+    Array(const Array & arr) {                                                                                  /* copy constructor */
         T* temp = new T[arr._size];
         std::copy(arr._data, arr._data + arr._size, temp);
 
@@ -52,8 +51,7 @@ public:
         initialized = true;    
     }
 
-    /* Copy Assignment */
-    Array& operator=(const Array& arr){
+    Array& operator=(const Array& arr){                                                                         /* Copy Assignment */
         if(this != &arr) {    // protect against invalid self-assingment
             T* temp = new T[arr._size];
             std::copy(arr._data, arr._data + arr._size, temp);
@@ -73,9 +71,7 @@ public:
     /*
      * Initializations
      */
-
-    // initialize with a default memory
-    void init(int size, T _value=0) {
+    void init(int size, T _value=0) {                                                                           // initialize with a default memory
         if(initialized)
             clear();
 
@@ -127,7 +123,29 @@ public:
     Array& operator/(T val){                                                                                        // division to single value
         std::transform(_data, _data+_size, _data, [val](T x) {return x / val;});
         return *this;
-    } 
+    }
+
+    Array& operator+(const Array& arr){                                                                              // Array sum with another array
+        if(this->_size != arr._size)     
+            throw std::runtime_error("Cannot get sum of two arrays that have unequal size!\n");
+            
+        for(int i=0; i<_size; i++) 
+            _data[i] += arr._data[i];
+
+        return *this;
+    }
+
+    float find_dist(Array<T>& arr, int dist_type=0) {                                                               // finde distance between two arrays => l2 norm for now (dist_type=0)
+        if(_size != arr.size()) {
+            print_warning("Only can find dist between same size arrays!");
+            return -1.0;
+        }
+        
+        float dist = .0;
+        for(int i=0; i<_size; i++)
+            dist += pow(get_point(i) - arr.get_point(i), 2);
+        return sqrt(dist);
+    }
 
     /*
      * Utility Functions
@@ -264,6 +282,20 @@ public:
             return this->_matrix[index].get_array(); 
         return nullptr;        
     }
+
+    Array<T>& get_row_array(int index) {
+        if(index > _height)
+            throw std::invalid_argument("Try to reach uninitialized memory in Matrix2d!\n");
+        return this->_matrix[index]; 
+    }
+
+    void set_row(int index, Array<T> array){
+        if(index > _height)
+            throw std::invalid_argument("Try to reach uninitialized memory in Matrix2d!\n");
+        else if(_width != array.size())
+            throw std::invalid_argument("Invalid data size for data overwriting!\n");
+        this->_matrix[index].row_init(_width, array.get_array());
+    }
     
     /* get single point
      * y: row
@@ -300,8 +332,9 @@ public:
      * Operations
      */
     Matrix2d& operator/(T val){                                                                                 // division to single value
-        for(int i=0; i<_height; i++) 
-            _matrix[i] = _matrix[i] / val;
+        //for(int i=0; i<_height; i++) 
+            //_matrix[i] = _matrix[i] / val;
+        std::transform(_matrix, _matrix+_height, _matrix, [val](Array<T> x) {return x / val;});
         return *this;
     } 
 
